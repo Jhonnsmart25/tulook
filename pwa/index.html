@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tu look, a tu medida</title>
+<meta name="theme-color" content="#D8336F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tu Look">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<style>
+:root{--bg:#F1EFF6;--card:#FFFFFF;--ink:#1F1B2E;--mut:#645F78;--line:#DDD8EA;--acc:#D8336F;--acc2:#1C7C7D;--onacc:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17141F;--card:#211D2E;--ink:#F1EEF8;--mut:#A9A3BD;--line:#382F4D;--acc:#F0679A;--acc2:#4FC3C3;--onacc:#17141F}}
+:root[data-theme="dark"]{--bg:#17141F;--card:#211D2E;--ink:#F1EEF8;--mut:#A9A3BD;--line:#382F4D;--acc:#F0679A;--acc2:#4FC3C3;--onacc:#17141F}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:28px 18px 60px}
+h1,h2,h3{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.1;margin:0}
+h1{font-size:clamp(32px,8vw,48px);font-weight:800;letter-spacing:-.02em}
+h2{font-size:22px;font-weight:800;margin-bottom:12px}
+h3{font-size:17px;font-weight:600;margin-bottom:6px}
+.lead{color:var(--mut);margin:10px 0 26px;max-width:52ch}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+label,.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 6px}
+input[type=number],input[type=email],select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+input:focus-visible,select:focus-visible,button:focus-visible,.opt:focus-within{outline:3px solid var(--acc2);outline-offset:2px}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.opt span{display:block;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg);font-weight:500;font-size:15px}
+.opt input:checked+span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.faces{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:16px}
+.faces .opt span{border-radius:12px;height:100%}
+.faces small{display:block;color:var(--mut);font-weight:400;font-size:13px;line-height:1.35}
+.opt input:checked+span small{color:inherit;opacity:.8}
+.photo{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.photo input{font-size:14px;max-width:100%}
+.note{color:var(--mut);font-size:13px}
+button.go{width:100%;padding:16px;border:0;border-radius:14px;background:var(--acc);color:var(--onacc);font:700 17px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;margin-top:8px}
+.err{color:var(--acc);font-weight:700;margin-top:10px;min-height:1.4em}
+#res{display:none}
+.hero{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ph{width:132px;height:164px;border-radius:66px;background:var(--bg);border:2px solid var(--line);object-fit:cover;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:12px;text-align:center;padding:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:13px}
+.sw{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.sw div{width:64px;text-align:center;font-size:12px;color:var(--mut);line-height:1.2}
+.sw i{display:block;height:44px;border-radius:12px;border:1px solid var(--line);margin-bottom:4px}
+ul{margin:6px 0 0;padding-left:20px}li{margin-bottom:4px}
+.blk{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.blk:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.av{width:120px;height:auto;flex:none}
+textarea{width:100%;min-height:120px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;resize:vertical}
+button.cp{margin-top:8px;padding:10px 16px;border-radius:10px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:700 14px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer}
+.prohead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.cnt{background:var(--bg);border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700}
+.badge{background:var(--acc);color:var(--onacc);border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;vertical-align:middle;margin-left:6px}
+.procard{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.thumbs{display:flex;gap:6px;margin-top:8px}
+.thumbs img{width:44px;height:44px;border-radius:10px;object-fit:cover;border:1px solid var(--line)}
+.proBtns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.proBtns button{padding:10px 14px;border-radius:10px;border:1px solid var(--ink);background:transparent;color:var(--ink);font:700 14px inherit;cursor:pointer}
+.proBtns button.pri{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
+.proMail{padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;min-width:190px}
+.proMsg{font-size:13px;color:var(--mut);margin-top:6px;width:100%}
+@media(max-width:480px){.row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>Tu look, a tu medida</h1>
+<p class="lead">Cuéntanos un poco de ti y te sugerimos corte, colores y ropa que resaltan lo mejor de ti. Son guías, no reglas: elige lo que te haga sentir tú.</p>
+
+<section class="card procard" id="proCard">
+  <div style="flex:1;min-width:220px"><h3 style="margin-bottom:2px" id="proTitle">Versión Pro</h3><p class="note" style="margin:0">Accesorios recomendados y fotos ilimitadas.</p></div>
+  <div class="proBtns">
+    <input class="proMail" id="proEmail" type="email" placeholder="tu@correo.com">
+    <button class="pri" id="proBuy" type="button">Hazte Pro</button>
+    <button id="proRestore" type="button">Restaurar compra</button>
+    <p class="proMsg" id="proMsg"></p>
+  </div>
+</section>
+
+<section class="card" id="f">
+  <span class="lbl">Estilo que quieres explorar</span>
+  <div class="opts" id="g">
+    <label class="opt"><input type="radio" name="g" value="mujer"><span>Femenino</span></label>
+    <label class="opt"><input type="radio" name="g" value="hombre"><span>Masculino</span></label>
+    <label class="opt"><input type="radio" name="g" value="neutro" checked><span>Neutro</span></label>
+  </div>
+  <div class="row">
+    <div><label for="edad">Edad</label><input id="edad" type="number" min="12" max="99" inputmode="numeric" placeholder="28"></div>
+    <div><label for="alt">Estatura (cm)</label><input id="alt" type="number" min="120" max="220" inputmode="numeric" placeholder="170"></div>
+    <div><label for="peso">Peso (kg)</label><input id="peso" type="number" min="30" max="250" inputmode="numeric" placeholder="70"></div>
+  </div>
+  <div class="grid2">
+    <div><label for="tono">Tono de piel</label><select id="tono"><option value="clara">Clara</option><option value="media" selected>Media</option><option value="morena">Morena</option><option value="oscura">Oscura</option></select></div>
+    <div><label for="sub">Subtono (venas de la muñeca)</label><select id="sub"><option value="neutro">No estoy seguro/a</option><option value="calido">Verdosas (cálido)</option><option value="frio">Azuladas (frío)</option></select></div>
+    <div><label for="cab">Tipo de cabello</label><select id="cab"><option value="lacio">Lacio</option><option value="ondulado">Ondulado</option><option value="rizado">Rizado</option><option value="fino">Fino o con poco volumen</option></select></div>
+    <div><label for="oca">¿A dónde te diriges?</label><select id="oca"><option value="escuela">Escuela</option><option value="trabajo">Trabajo</option><option value="iglesia">Iglesia</option><option value="pasear">Pasear</option><option value="cita">Una cita</option><option value="fiesta">Fiesta</option></select></div>
+  </div>
+  <span class="lbl">Forma de tu cara</span>
+  <div class="faces" id="faces"></div>
+  <div class="prohead"><span class="lbl" style="margin:0">Fotos (opcional)</span><span class="cnt" id="fotoCount">0/3</span></div>
+  <div class="photo"><input id="foto" type="file" accept="image/*" multiple></div>
+  <p class="note">Las fotos se quedan en tu dispositivo: no se suben ni se guardan en ningún servidor. Versión gratis: hasta 3. <b>Pro</b>: ilimitadas.</p>
+  <button class="go" id="go" type="button">Ver mi look</button>
+  <div class="err" id="err" role="alert"></div>
+</section>
+
+<div id="res"></div>
+</main>
+
+<script>
+const F={
+oval:{n:"Ovalada",d:"Frente y mandíbula de ancho similar, barbilla suave.",g:"Casi cualquier montura te queda bien; prueba las que te gusten.",
+ mujer:["Bob a la altura de la barbilla con puntas suaves","Capas largas con raya al lado o flequillo cortina"],
+ hombre:["Fade medio con volumen arriba, peinado hacia atrás","Corte texturizado a tijera de largo medio"],
+ neutro:["Media melena con capas ligeras","Corte texturizado con flequillo lateral"]},
+redonda:{n:"Redonda",d:"Ancho y largo parecidos, mejillas llenas.",g:"Monturas rectangulares o angulares para dar estructura.",
+ mujer:["Capas largas que pasen los hombros para alargar","Lob asimétrico con raya lateral"],
+ hombre:["Fade alto con altura arriba (quiff o pompadour)","Undercut con copete texturizado"],
+ neutro:["Corte con altura arriba y laterales más cortos","Capas largas con raya profunda"]},
+cuadrada:{n:"Cuadrada",d:"Frente y mandíbula anchas, líneas marcadas.",g:"Monturas redondas u ovaladas que suavicen los ángulos.",
+ mujer:["Ondas suaves a la altura de la clavícula","Capas largas con flequillo de lado"],
+ hombre:["Corte texturizado medio con laterales degradados","Crew cut con un poco de largo arriba"],
+ neutro:["Melena con ondas suaves y capas","Corte corto con textura y flequillo lateral"]},
+corazon:{n:"Corazón",d:"Frente amplia y barbilla más fina.",g:"Monturas ligeras, más anchas abajo o de aviador delgado.",
+ mujer:["Lob con volumen a la altura de la barbilla","Flequillo cortina con capas desde las mejillas"],
+ hombre:["Corte medio peinado hacia un lado con flequillo","Textura con largo medio y laterales naturales"],
+ neutro:["Melena con volumen desde la barbilla hacia abajo","Flequillo lateral con capas medias"]},
+alargada:{n:"Alargada",d:"Rostro más largo que ancho.",g:"Monturas grandes y anchas para equilibrar la longitud.",
+ mujer:["Flequillo recto o cortina que acorte visualmente","Ondas con volumen a los lados a la altura de la barbilla"],
+ hombre:["Volumen a los lados y menos altura arriba","Flequillo texturizado hacia adelante"],
+ neutro:["Bob con flequillo","Capas con volumen lateral"]},
+diamante:{n:"Diamante",d:"Pómulos marcados, frente y mandíbula más angostas.",g:"Monturas ovaladas o browline que equilibren los pómulos.",
+ mujer:["Flequillo lateral con capas que suavicen los pómulos","Bob con volumen en la parte baja"],
+ hombre:["Largo en la frente y laterales cortos","Textura con flequillo hacia un lado"],
+ neutro:["Melena con capas y volumen en frente y barbilla","Flequillo lateral de largo medio"]}
+};
+const HT={lacio:"Con cabello lacio funcionan las líneas limpias; un poco de spray de textura da movimiento.",ondulado:"Aprovecha tu onda natural: córtalo en seco y usa crema ligera para definirla.",rizado:"Pide un corte por capas que siga tu rizo y mantenlo hidratado; define con crema o gel.",fino:"Elige cortes que sumen volumen y evita capas muy marcadas; un champú voluminizador ayuda."};
+const P={
+calido:{n:"Cálido",c:[["Terracota","#C4633F"],["Mostaza","#D4A017"],["Oliva","#6B7A3A"],["Camel","#B98B5B"],["Coral","#F0785F"],["Crema","#F1E6CF"]],t:"Los tonos tierra y dorados te iluminan. El blanco muy frío o el gris azulado úsalos con moderación."},
+frio:{n:"Frío",c:[["Azul rey","#2745A8"],["Esmeralda","#0E8A63"],["Ciruela","#6D2B62"],["Gris","#7C8290"],["Fucsia","#C7266F"],["Blanco","#F7F8FB"]],t:"Los azules, morados y verdes profundos te favorecen. Los mostazas y naranjas quémalos solo como acento."},
+neutro:{n:"Neutro",c:[["Jade","#3E9A7A"],["Rosa palo","#D9A0A6"],["Petróleo","#1F6673"],["Marino","#1F2B4D"],["Vino","#7C2A3F"],["Hueso","#EDE6DA"]],t:"Tienes flexibilidad: casi cualquier paleta funciona. Prueba junto a tu cara y elige la que te dé más luz."}};
+const TONO={clara:"Con piel clara, elige colores de intensidad media; los muy pálidos pueden 'lavar' tu cara.",media:"Con piel media, tienes rango amplio: juega con contrastes y saturación.",morena:"Con piel morena, los colores saturados y las joyas tonos oro se ven espectaculares.",oscura:"Con piel oscura, los colores vivos y los blancos nítidos crean un contraste muy elegante."};
+const OUT={
+escuela:{mujer:"Jeans o falda cómoda + blusa sencilla + tenis",hombre:"Jeans + playera o camisa casual + tenis",neutro:"Pantalón cómodo + playera + tenis"},
+trabajo:{mujer:"Pantalón sastre + blusa de tela fluida + blazer + mocasines",hombre:"Chinos + camisa oxford + blazer sin forro + zapato derby",neutro:"Pantalón sastre + camisa + blazer + mocasines"},
+iglesia:{mujer:"Vestido midi o falda con blusa + zapatilla cerrada",hombre:"Pantalón de vestir + camisa + saco opcional + zapato cerrado",neutro:"Pantalón de vestir + camisa + calzado cerrado"},
+pasear:{mujer:"Jeans + top cómodo + tenis + chamarra ligera",hombre:"Shorts o jeans + playera + tenis + gorra",neutro:"Pantalón cómodo + playera + tenis + capa ligera"},
+cita:{mujer:"Vestido o conjunto en un color de tu paleta + botín o zapatilla",hombre:"Camisa con textura + pantalón oscuro + botas o zapato limpio",neutro:"Una pieza protagonista + base oscura + calzado que destaque"},
+fiesta:{mujer:"Vestido con brillo o textura + tacón o zapatilla + accesorio llamativo",hombre:"Camisa con textura o color + pantalón oscuro + zapato de vestir",neutro:"Pieza statement + base oscura + calzado pulido"}};
+const OCL={escuela:"la escuela",trabajo:"el trabajo",iglesia:"la iglesia",pasear:"pasear",cita:"tu cita",fiesta:"la fiesta"};
+const ACC={
+oval:["Aretes largos o relojes de carátula grande: casi todo te sienta bien","Bufandas y pañuelos con estampado libre","Lentes de sol de cualquier forma"],
+redonda:["Aretes largos y angulares que alargan el rostro","Collares largos en V para estilizar el cuello","Lentes de sol rectangulares"],
+cuadrada:["Aretes redondos u ovalados que suavizan la mandíbula","Collares con curvas, evita líneas muy rectas","Lentes de sol redondos u ovalados"],
+corazon:["Aretes tipo candelabro que equilibran la barbilla","Collares a la altura de la clavícula","Lentes de sol de aviador delgados"],
+alargada:["Aretes cortos tipo botón para no alargar más el rostro","Collares cortos o gargantillas","Lentes de sol grandes y anchos"],
+diamante:["Aretes que rocen la mandíbula y suavicen los pómulos","Collares con volumen cerca del cuello","Lentes de sol ovalados o estilo browline"]};
+let face=null,img=null,fotos=[],pro=false;
+const FP={
+oval:"M100 50 C140 50 150 90 148 115 C146 150 125 172 100 172 C75 172 54 150 52 115 C50 90 60 50 100 50Z",
+redonda:"M100 58 C145 58 154 100 150 125 C146 160 125 170 100 170 C75 170 54 160 50 125 C46 100 55 58 100 58Z",
+cuadrada:"M56 62 Q100 44 144 62 L150 130 Q146 168 100 170 Q54 168 50 130Z",
+corazon:"M52 66 Q100 44 148 66 Q152 110 128 148 Q112 176 100 178 Q88 176 72 148 Q48 110 52 66Z",
+alargada:"M100 40 C136 40 144 80 142 120 C140 165 122 186 100 186 C78 186 60 165 58 120 C56 80 64 40 100 40Z",
+diamante:"M100 50 C118 50 130 66 138 96 Q150 118 134 146 Q118 174 100 176 Q82 174 66 146 Q50 118 62 96 C70 66 82 50 100 50Z"};
+function avatar(g,tono,face,oca,p){
+ const sk={clara:"#F2CDB0",media:"#D9A47C",morena:"#A9714B",oscura:"#6B4229"}[tono],hr="#2B1D17";
+ const top=p.c[(oca=="fiesta"||oca=="cita")?4:0][1],bot=(oca=="trabajo"||oca=="iglesia")?p.c[3][1]:(oca=="escuela"||oca=="pasear")?"#33456B":"#1E1B26",sh=p.c[5][1];
+ const back=g=="mujer"?`<path d="M48 110 Q44 30 100 28 Q156 30 152 110 L156 235 Q100 250 44 235Z" fill="${hr}"/>`:g=="neutro"?`<path d="M50 110 Q46 30 100 28 Q154 30 150 110 L152 190 Q100 200 48 190Z" fill="${hr}"/>`:"";
+ const fr=face=="alargada"||face=="corazon"||face=="diamante";
+ const cap=fr?`<path d="M50 105 Q46 30 100 30 Q154 30 150 105 Q120 84 100 92 Q80 84 50 105Z" fill="${hr}"/>`:`<path d="M50 105 Q46 30 100 30 Q154 30 150 105 Q140 68 100 66 Q60 68 50 105Z" fill="${hr}"/>`;
+ const chest=(oca=="trabajo"||oca=="iglesia")?`<path d="M84 190 L100 246 L116 190Z" fill="${sh}"/><path d="M84 190 L100 246 L97 292 M116 190 L100 246 L103 292" stroke="#0003" stroke-width="2" fill="none"/>`:`<path d="M86 190 Q100 212 114 190Z" fill="${sk}"/>`;
+ return `<svg class="av" viewBox="0 0 200 400" role="img" aria-label="Ilustración de referencia del look sugerido">${back}
+ <rect x="88" y="158" width="24" height="36" fill="${sk}"/>
+ <path d="M50 215 L30 292 L46 296 L62 236Z M150 215 L170 292 L154 296 L138 236Z" fill="${top}"/>
+ <circle cx="38" cy="302" r="9" fill="${sk}"/><circle cx="162" cy="302" r="9" fill="${sk}"/>
+ <path d="M55 292 L50 215 Q50 192 75 190 L125 190 Q150 192 150 215 L145 292Z" fill="${top}"/>${chest}
+ <rect x="68" y="290" width="30" height="92" rx="6" fill="${bot}"/><rect x="102" y="290" width="30" height="92" rx="6" fill="${bot}"/>
+ <rect x="62" y="376" width="38" height="16" rx="8" fill="#F4F2F8" stroke="#8886"/><rect x="100" y="376" width="38" height="16" rx="8" fill="#F4F2F8" stroke="#8886"/>
+ <path d="${FP[face]}" fill="${sk}"/>
+ <circle cx="82" cy="112" r="3.5" fill="#1F1B2E"/><circle cx="118" cy="112" r="3.5" fill="#1F1B2E"/>
+ <path d="M72 100 Q82 95 92 100 M108 100 Q118 95 128 100" stroke="${hr}" stroke-width="3" fill="none" stroke-linecap="round"/>
+ <path d="M88 148 Q100 158 112 148" stroke="#7A3B3B" stroke-width="3" fill="none" stroke-linecap="round"/>${cap}</svg>`;
+}
+const $=id=>document.getElementById(id);
+window.cp=()=>{const t=$("pr");t.select();try{navigator.clipboard.writeText(t.value)}catch(e){try{document.execCommand("copy")}catch(_){}}$("cpb").textContent="Copiado"};
+
+// ---- Pago Pro con Stripe: pega aquí la URL de tu backend (ver README-STRIPE.md) ----
+const BACKEND_URL = "https://TU-BACKEND.onrender.com";
+
+function fotoLbl(){$("fotoCount").textContent=fotos.length+"/"+(pro?"∞":"3")}
+function marcarPro(si,correo){
+ pro=si;
+ try{localStorage.setItem("tulook_pro",si?"1":"0");if(correo)localStorage.setItem("tulook_email",correo)}catch(e){}
+ $("proTitle").textContent=si?"Versión Pro activa":"Versión Pro";
+ fotoLbl();
+}
+try{if(localStorage.getItem("tulook_pro")==="1")marcarPro(true)}catch(e){}
+try{const guardado=localStorage.getItem("tulook_email");if(guardado)$("proEmail").value=guardado}catch(e){}
+
+$("proBuy").onclick=async()=>{
+ const email=$("proEmail").value.trim();
+ if(!email){$("proMsg").textContent="Escribe tu correo para continuar.";return}
+ $("proMsg").textContent="Abriendo pago seguro con Stripe...";
+ try{
+  const r=await fetch(BACKEND_URL+"/create-checkout-session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})});
+  const d=await r.json();
+  if(d.url) location.href=d.url; else $("proMsg").textContent="No se pudo iniciar el pago. Intenta de nuevo.";
+ }catch(e){$("proMsg").textContent="No hay conexión con el servidor de pagos."}
+};
+$("proRestore").onclick=async()=>{
+ const email=$("proEmail").value.trim();
+ if(!email){$("proMsg").textContent="Escribe el correo con el que pagaste.";return}
+ $("proMsg").textContent="Buscando tu compra...";
+ try{
+  const r=await fetch(BACKEND_URL+"/check-status?email="+encodeURIComponent(email));
+  const d=await r.json();
+  if(d.pro){marcarPro(true,email);$("proMsg").textContent="¡Listo! Pro activado en este dispositivo."}
+  else $("proMsg").textContent="No encontramos una compra con ese correo.";
+ }catch(e){$("proMsg").textContent="No hay conexión con el servidor de pagos."}
+};
+(function(){
+ const q=new URLSearchParams(location.search);
+ if(q.get("pro")==="exito"&&q.get("email")){
+  $("proEmail").value=q.get("email");
+  $("proRestore").click();
+ }
+})();
+// ---- fin bloque Stripe ----
+
+$("faces").innerHTML=Object.entries(F).map(([k,v])=>`<label class="opt"><input type="radio" name="face" value="${k}"><span><b>${v.n}</b><small>${v.d}</small></span></label>`).join("");
+document.querySelectorAll('input[name=face]').forEach(r=>r.onchange=()=>face=r.value);
+$("foto").onchange=e=>{
+ const files=Array.from(e.target.files),max=pro?99:3;
+ if(!pro&&files.length>3){alert("La versión gratis permite hasta 3 fotos. Activa Pro para subir más.")}
+ const use=files.slice(0,max);fotos=[];
+ use.forEach(f=>{const r=new FileReader();r.onload=()=>{fotos.push(r.result);img=fotos[0];fotoLbl()};r.readAsDataURL(f)});
+};
+$("go").onclick=()=>{
+ const g=document.querySelector('input[name=g]:checked').value,edad=+$("edad").value,alt=+$("alt").value,peso=+$("peso").value;
+ if(!edad||!alt||!peso){$("err").textContent="Completa edad, estatura y peso.";return}
+ if(!face){$("err").textContent="Elige la forma de tu cara.";return}
+ $("err").textContent="";
+ const tono=$("tono").value,sub=$("sub").value,cab=$("cab").value,oca=$("oca").value;
+ const imc=peso/((alt/100)**2);
+ const talla=alt<160?"bajo":alt>176?"alto":"medio";
+ const cx=imc<19?"delgada":imc<25?"media":"llena";
+ const T={
+  bajo:"Alarga tu figura con líneas verticales, prendas de un mismo color y pantalón de tiro alto. Cuida que las prendas no se pasen de largo.",
+  alto:"Tienes libertad para capas, prendas largas, cortes oversize y cinturones anchos.",
+  medio:"Tus proporciones te permiten jugar con casi todo: prueba siluetas rectas y ajustadas según el día."};
+ const C={
+  delgada:"Suma volumen con texturas, capas, telas gruesas y estampados horizontales.",
+  media:"Combina siluetas ajustadas y rectas; te queda bien lo que te haga sentir cómodo/a.",
+  llena:"Elige telas con caída, prendas estructuradas de tu talla exacta y cuellos en V; una capa abierta larga estiliza."};
+ const A=edad<25?"Puedes experimentar con tendencias, streetwear y colores atrevidos.":edad<45?"Invierte en básicos de buena calidad: blazer, denim oscuro y calzado versátil.":"Apuesta por clásicos con buen corte, telas nobles y calzado cómodo y elegante.";
+ const f=F[face],p=P[sub];
+ $("res").style.display="block";
+ $("res").innerHTML=`<section class="card">
+  <div class="hero">
+   ${img?`<img class="ph" src="${img}" alt="Tu foto">`:`<div class="ph">Agrega una foto para verla aquí</div>`}
+   ${avatar(g,tono,face,oca,p)}
+   ${fotos.length>1?`<div class="thumbs">${fotos.map(x=>`<img src="${x}">`).join("")}</div>`:""}
+   <div style="flex:1;min-width:200px"><h2>Tu look sugerido</h2>
+    <div class="chips"><span class="chip">Cara ${f.n.toLowerCase()}</span><span class="chip">Paleta ${p.n.toLowerCase()}</span><span class="chip">Cabello ${cab}</span><span class="chip">Para ${OCL[oca]}</span></div>
+    <p class="note" style="margin-top:10px">La figura es una ilustración de referencia con tu forma de cara, tono de piel, cabello y colores. Abajo tienes un prompt para generar la foto real con IA.</p></div>
+  </div>
+  <div class="blk"><h3>Peinado y corte</h3><ul><li><b>Opción A:</b> ${f[g][0]}</li><li><b>Opción B:</b> ${f[g][1]}</li></ul><p>${HT[cab]}</p></div>
+  <div class="blk"><h3>Colores que te favorecen</h3><div class="sw">${p.c.map(c=>`<div><i style="background:${c[1]}"></i>${c[0]}</div>`).join("")}</div><p>${p.t} ${TONO[tono]}</p></div>
+  <div class="blk"><h3>Outfit para ${OCL[oca]}</h3><p>${OUT[oca][g]}</p><ul><li>${T[talla]}</li><li>${C[cx]}</li><li>${A}</li></ul></div>
+  <div class="blk"><h3>Genera tu foto con IA</h3><p class="note">Copia este texto y pégalo en un generador de imágenes (por ejemplo ChatGPT, Gemini, Midjourney o Ideogram). Si el generador permite subir tu foto, agrégala para que conserve tus rasgos.</p>
+   <textarea id="pr" readonly>Fotografía de moda realista, retrato de cuerpo completo de una persona de ${edad} años, ${alt} cm de estatura, rostro de forma ${f.n.toLowerCase()}, piel ${tono}, cabello ${cab}. Peinado: ${f[g][0].toLowerCase()}. Vestimenta para ${OCL[oca]}: ${OUT[oca][g].toLowerCase()}. Paleta de colores: ${p.c.slice(0,4).map(c=>c[0].toLowerCase()).join(", ")}. Luz natural suave, fondo neutro, estilo editorial, alta calidad.</textarea>
+   <button class="cp" id="cpb" type="button" onclick="cp()">Copiar prompt</button></div>
+  <div class="blk"><h3>Accesorios<span class="badge">PRO</span></h3>${pro?`<p>${f.g}</p><ul>${ACC[face].map(a=>`<li>${a}</li>`).join("")}</ul>`:`<p class="note">Activa la versión Pro (arriba) para ver los aretes, collares y lentes que más favorecen tu forma de cara.</p>`}</div>
+ </section>`;
+ $("res").scrollIntoView({behavior:"smooth"});
+};
+</script>
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+</script>
+</body>
+</html>

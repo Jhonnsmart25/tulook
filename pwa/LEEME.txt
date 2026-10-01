@@ -1,0 +1,18 @@
+TU LOOK, A TU MEDIDA - PWA con Stripe
+
+1) Antes de subir, edita index.html y busca la linea:
+     const BACKEND_URL = "https://TU-BACKEND.onrender.com";
+   cambiala por la URL real de tu backend (ver la carpeta "server" y su README-STRIPE.md).
+
+2) Publicar gratis (necesita HTTPS):
+   Netlify Drop: app.netlify.com/drop, arrastra esta carpeta.
+   GitHub Pages / Cloudflare Pages / Firebase Hosting tambien sirven.
+
+3) Instalar en Android: abre la URL en Chrome > tres puntos > "Instalar app".
+
+Nota: dentro de la vista previa de Claude (claude.ai/artifact/...) el boton "Hazte Pro"
+no podra conectarse al backend, porque esa vista previa bloquea peticiones a servidores
+externos por seguridad. Una vez publicada esta carpeta en Netlify/GitHub Pages, el pago
+funciona normal porque ya no tiene esa restriccion.
+
+Actualizar cache: sube el numero en sw.js ("tulook-v3" -> "tulook-v4") cada vez que cambies archivos.

@@ -1,0 +1,17 @@
+{
+  "name": "Tu look, a tu medida",
+  "short_name": "Tu Look",
+  "description": "Descubre el corte, los colores y la ropa que mejor se adaptan a ti.",
+  "lang": "es",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F1EFF6",
+  "theme_color": "#D8336F",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

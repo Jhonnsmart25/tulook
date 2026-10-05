@@ -13,40 +13,7 @@ const LIC_PATH = path.join(__dirname, "licenses.json");
 
 app.use(cors());
 
-function leerLicencias() {
-  try { return JSON.parse(fs.readFileSync(LIC_PATH, "utf8")); } catch (e) { return {}; }
-}
-function guardarLicencias(data) {
-  fs.writeFileSync(LIC_PATH, JSON.stringify(data, null, 2));
-}
-
-// 1) Crear la sesion de pago y mandar al usuario a la pagina de Stripe
-app.post("/create-checkout-session", async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: [
-        {
-          price: process.env.STRIPE_PRICE_ID, // O pon aquí directamente tu ID entre comillas: "price_1P..."
-          quantity: 1,
-        },
-      ],
-      customer_email: email,
-      success_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=exito&email=${encodeURIComponent(email || "")}`,
-      cancel_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=cancelado`,
-      metadata: { email: email || "" },
-    });
-
-    res.json({ id: session.id, url: session.url });
-  } catch (error) {
-    console.error("Error al crear sesión de checkout:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// 2) Webhook: Stripe avisa aqui cuando el pago se completo de verdad
+// Webhook debe ir ANTES de express.json() porque requiere el body en estado raw
 app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   let event;
   try {
@@ -69,12 +36,49 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   res.json({ recibido: true });
 });
 
+// Middleware para procesar JSON en el resto de las rutas (como /create-checkout-session)
+app.use(express.json());
+
+function leerLicencias() {
+  try { return JSON.parse(fs.readFileSync(LIC_PATH, "utf8")); } catch (e) { return {}; }
+}
+function guardarLicencias(data) {
+  fs.writeFileSync(LIC_PATH, JSON.stringify(data, null, 2));
+}
+
+// 1) Crear la sesion de pago y mandar al usuario a la pagina de Stripe
+app.post("/create-checkout-session", async (req, res) => {
+  try {
+    const email = req.body?.email || "";
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: [
+        {
+          price: process.env.STRIPE_PRICE_ID,
+          quantity: 1,
+        },
+      ],
+      customer_email: email || undefined,
+      success_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=exito&email=${encodeURIComponent(email)}`,
+      cancel_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=cancelado`,
+      metadata: { email: email },
+    });
+
+    res.json({ id: session.id, url: session.url });
+  } catch (error) {
+    console.error("Error al crear sesión de checkout:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // 3) La app pregunta aqui si un correo ya es Pro (al volver del pago o al "restaurar compra")
 app.get("/check-status", (req, res) => {
   const email = (req.query.email || "").trim().toLowerCase();
   const lic = leerLicencias();
   res.json({ pro: !!(lic[email] && lic[email].pro) });
 });
+
 
 app.get("/", (req, res) => res.send("Backend de Tu Look Pro funcionando."));
 

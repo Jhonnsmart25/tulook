@@ -21,23 +21,28 @@ function guardarLicencias(data) {
 }
 
 // 1) Crear la sesion de pago y mandar al usuario a la pagina de Stripe
-app.post("/create-checkout-session", express.json(), async (req, res) => {
+app.post("/create-checkout-session", async (req, res) => {
   try {
-    const email = (req.body && req.body.email || "").trim().toLowerCase();
-    if (!email) return res.status(400).json({ error: "Falta el correo" });
+    const { email } = req.body;
 
-const session = await stripe.checkout.sessions.create({
+    const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      line_items: [{ price: "price_AQUÍ_TU_ID_DE_PRECIO", quantity: 1 }],
+      line_items: [
+        {
+          price: process.env.STRIPE_PRICE_ID, // O pon aquí directamente tu ID entre comillas: "price_1P..."
+          quantity: 1,
+        },
+      ],
       customer_email: email,
-      success_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=exito&email=${encodeURIComponent(email)}`,
+      success_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=exito&email=${encodeURIComponent(email || "")}`,
       cancel_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=cancelado`,
-      metadata: { email }
+      metadata: { email: email || "" },
     });
-    res.json({ url: session.url });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "No se pudo crear la sesion de pago" });
+
+    res.json({ id: session.id, url: session.url });
+  } catch (error) {
+    console.error("Error al crear sesión de checkout:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 

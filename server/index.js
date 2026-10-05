@@ -26,12 +26,12 @@ app.post("/create-checkout-session", express.json(), async (req, res) => {
     const email = (req.body && req.body.email || "").trim().toLowerCase();
     if (!email) return res.status(400).json({ error: "Falta el correo" });
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment", // pago unico ("Pro de por vida"). Cambia a "subscription" si prefieres cobro mensual.
+   const session = await stripe.checkout.sessions.create({
+      mode: "payment",
       line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
       customer_email: email,
-      success_url: `${process.env.APP_URL}/index.html?pro=exito&email=${encodeURIComponent(email)}`,
-      cancel_url: `${process.env.APP_URL}/index.html?pro=cancelado`,
+      success_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=exito&email=${encodeURIComponent(email)}`,
+      cancel_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=cancelado`,
       metadata: { email }
     });
 

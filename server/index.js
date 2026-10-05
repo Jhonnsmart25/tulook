@@ -26,9 +26,9 @@ app.post("/create-checkout-session", express.json(), async (req, res) => {
     const email = (req.body && req.body.email || "").trim().toLowerCase();
     if (!email) return res.status(400).json({ error: "Falta el correo" });
 
-   const session = await stripe.checkout.sessions.create({
+  const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
+      line_items: [{ price: "price_AQUÍ_TU_ID_DE_PRECIO", quantity: 1 }],
       customer_email: email,
       success_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=exito&email=${encodeURIComponent(email)}`,
       cancel_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=cancelado`,

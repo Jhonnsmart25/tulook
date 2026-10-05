@@ -55,7 +55,7 @@ app.post("/create-checkout-session", async (req, res) => {
       mode: "payment",
       line_items: [
         {
-          price: process.env.STRIPE_PRICE_ID,
+          price: "price_1ULbWRCw0W2tdbe6mI4VoYdA", // Usa el que empieza por price_,
           quantity: 1,
         },
       ],

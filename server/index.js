@@ -51,13 +51,19 @@ app.post("/create-checkout-session", async (req, res) => {
   try {
     const email = req.body?.email || "";
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: [
-        {
-          price: "price_1ULbWRCw0W2tdbe6mI4VoYdA", // Usa el que empieza por price_,
-          quantity: 1,
-        },
+const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: [
+      {
+        price: "price_1ULbWRCw0W2tdbe6mI4VoYdA",
+        quantity: 1,
+      }
+    ],
+    customer_email: email || undefined,
+    success_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=exito&email=${encodeURIComponent(email || "")}`,
+    cancel_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=cancelado`,
+    metadata: { email: email || "" }
+  });
       ],
       customer_email: email || undefined,
       success_url: `https://sparkly-dolphin-4b54e8.netlify.app/index.html?pro=exito&email=${encodeURIComponent(email)}`,
